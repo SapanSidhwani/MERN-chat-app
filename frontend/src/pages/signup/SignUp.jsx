@@ -1,6 +1,45 @@
+import { Link } from "react-router-dom"
 import GenderCheckBox from "./GenderCheckBox"
+import { useState } from "react";
+import useSignup from "../../hooks/useSignup";
 
 const SignUp = () => {
+
+  const { signup, loading } = useSignup();
+  const [inputs, setInputs] = useState({
+    userName: "",
+    password: "",
+    confirmPassword: "",
+    fullName: "",
+    gender: "",
+  });
+
+  const handleChange = (e) => {
+    setInputs((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }))
+  }
+
+  const handleCheckboxChange = (gender) => {
+    setInputs((prev) => ({
+      ...prev,
+      gender
+    }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await signup(inputs);
+    setInputs({
+      userName: "",
+      password: "",
+      confirmPassword: "",
+      fullName: "",
+      gender: "",
+    });
+  }
+
   return (
     <div className="flex justify-center flex-col items-center mx-auto min-w-96">
       {/* Tailwind Glassmorphism */}
@@ -9,40 +48,44 @@ const SignUp = () => {
           Sign Up
           <span className="text-info"> ChatApp</span>
         </h1>
-        <form action="">
+        <form action="" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="fullname" className="label p-2">
+            <label htmlFor="fullName" className="label p-2">
               <span className="label-text text-base">Fullname</span>
             </label>
-            <input type="text" id="fullname" name="fullname" placeholder="John Doe"
-              className="input input-bordered input-info w-full max-w-xs" />
+            <input type="text" id="fullName" name="fullName" placeholder="John Doe"
+              className="input input-bordered input-info w-full max-w-xs" value={inputs.fullName} onChange={handleChange} />
           </div>
           <div>
-            <label htmlFor="username" className="label p-2">
+            <label htmlFor="userName" className="label p-2">
               <span className="label-text text-base">Username</span>
             </label>
-            <input type="text" id="username" name="username" placeholder="JohnDoe"
-              className="input input-bordered input-info w-full max-w-xs" />
+            <input type="text" id="userName" name="userName" placeholder="JohnDoe"
+              className="input input-bordered input-info w-full max-w-xs" value={inputs.userName} onChange={handleChange} />
           </div>
           <div>
             <label htmlFor="password" className="label p-2">
               <span className="label-text text-base">Password</span>
             </label>
             <input id="password" name="password" type="password" placeholder="Enter password"
-              className="input input-bordered input-info w-full max-w-xs" />
+              className="input input-bordered input-info w-full max-w-xs" value={inputs.password} onChange={handleChange} />
           </div>
           <div>
             <label htmlFor="confirm-password" className="label p-2">
               <span className="label-text text-base">Confirm Password</span>
             </label>
             <input type="password" className="input input-bordered input-info w-full max-w-xs"
-              placeholder="Confirm Password" id="confirm-password" name=" confirmPassword" />
+              placeholder="Confirm Password" id="confirm-password" name="confirmPassword" value={inputs.confirmPassword} onChange={handleChange} />
           </div>
-          <GenderCheckBox />
-          <a href="#" className="text-sm hover:underline w-full text-center text-blue-400 mt-3 mb-1 inline-block">
+          <GenderCheckBox onCheckBoxChange={handleCheckboxChange} selectedGender={inputs.gender} />
+          <Link to="/login" className="text-sm hover:underline w-full text-center text-blue-400 mt-3 mb-1 inline-block">
             {"Already"} have an account?
-          </a>
-          <div className="btn btn-block btn-sm mt-2 btn-info">Sign Up</div>
+          </Link>
+          <div>
+            <button type="submit" disabled={loading} className="btn btn-block btn-sm mt-2 btn-info">
+              {loading ? <span className="loading loading-spinner"></span> : "Sign Up"}
+            </button>
+          </div>
         </form>
       </div>
     </div>
@@ -67,17 +110,17 @@ const SignUp = () => {
         </h1>
         <form action="">
           <div>
-            <label htmlFor="fullname" className="label p-2">
+            <label htmlFor="fullName" className="label p-2">
               <span className="label-text text-base">Fullname</span>
             </label>
-            <input type="text" id="fullname" name="fullname" placeholder="John Doe"
+            <input type="text" id="fullName" name="fullName" placeholder="John Doe"
               className="input input-bordered input-info w-full max-w-xs" />
           </div>
           <div>
-            <label htmlFor="username" className="label p-2">
+            <label htmlFor="userName" className="label p-2">
               <span className="label-text text-base">Username</span>
             </label>
-            <input type="text" id="username" name="username" placeholder="JohnDoe"
+            <input type="text" id="userName" name="userName" placeholder="JohnDoe"
               className="input input-bordered input-info w-full max-w-xs" />
           </div>
           <div>
