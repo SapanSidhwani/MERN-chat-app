@@ -3,18 +3,23 @@ import bcrypt from 'bcryptjs';
 import generateTokenAndSetCookie from '../utils/generateToken.js';
 
 export const signup = async (req, res) => {
+
+    const { fullName, userName, password, confirmPassword, gender } = req.body;
+
+    const user = await User.findOne({ userName });
+    if (user) {
+        res.status(400).json({ error: "Username alredy exists" });
+        return
+    }
+
     try {
-        const { fullName, userName, password, confirmPassword, gender } = req.body;
         if (password !== confirmPassword) {
             res.status(400).json({ error: "Passwords don't match" });
         }
         if (password.length < 5) {
             res.status(400).json({ error: "Password must be 6 characters long" });
         }
-        const user = await User.findOne({ userName });
-        if (user) {
-            res.status(400).json({ error: "Username alredy exists" });
-        }
+
         // Hash Password
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(password, salt);
@@ -56,17 +61,19 @@ export const signup = async (req, res) => {
 }
 
 export const login = async (req, res) => {
+
+    const { userName, password } = req.body;
+    const user = await User.findOne({ userName });
+
+    // user? : If user is undefined 
+    const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
+
+    if (!user || !isPasswordCorrect) {
+        res.status(400).json({ error: "Invalid username or password" });
+        return;
+    }
+
     try {
-
-        const { userName, password } = req.body;
-        const user = await User.findOne({ userName });
-
-        // user? : If user is undefined 
-        const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
-
-        if (!user || !isPasswordCorrect) {
-            res.status(400).json({ error: "Invalid username or password" });
-        }
 
         generateTokenAndSetCookie(user._id, res);
 
