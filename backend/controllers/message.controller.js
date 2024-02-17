@@ -38,7 +38,6 @@ export const getMessage = async (req, res) => {
         // You are a Receiver
         const { senderId } = req.params;
         const receiverId = req.user._id;
-        console.log(senderId, receiverId);
 
         const conversation = await Conversation.findOne({
             participants: { $all: [senderId, receiverId] },
@@ -47,7 +46,6 @@ export const getMessage = async (req, res) => {
         if (!conversation) {
             return res.status(200).json([]);
         }
-
 
         res.status(200).json(conversation.messages)
     } catch (error) {
