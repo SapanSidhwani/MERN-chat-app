@@ -17,7 +17,7 @@ const Message = ({ message }) => {
                     <img alt="Tailwind CSS chat bubble component" src={profilePic} />
                 </div>
             </div>
-            <div className={`chat-bubble text-white pb-2 mb-[2px] ${ME ? 'bg-blue-500' : ''}`} >{message.message}</div>
+            <div className={`chat-bubble text-white pb-2 mb-[2px] ${message.shouldShake ? 'shake' : ''} ${ME ? 'bg-blue-500' : ''}`} >{message.message}</div>
             <div className="chat-footer opacity-80 text-xs flex gap-1 items-center">
                 {/* { extractTime(message.createdAt) } */}
                 {new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
