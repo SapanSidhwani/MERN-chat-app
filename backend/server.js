@@ -19,10 +19,10 @@ dotenv.config();
 app.use(express.json()); // to Parse the incoming requests with JSON payloads(from req.body)
 app.use(cookieParser());
 
-app.get('/', (req, res) => {
-    // root route http://localhost:5000/
-    res.send('<h1>Hello World</h1>')
-});
+// app.get('/', (req, res) => {
+//     // root route http://localhost:5000/
+//     res.send('<h1>Hello World</h1>')
+// });
 
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messageRoutes);
